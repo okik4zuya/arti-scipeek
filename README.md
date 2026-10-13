@@ -15,6 +15,20 @@ so nothing is sent to any server.
 - **Consistent colour ramp:** Q1 green, Q2 amber, Q3 orange, Q4 red.
 - **Private by design:** no network requests, no tracking, no accounts.
 
+## Screenshots
+
+**Scopus** — badge beside each result's journal (Q4 red, Q1 green, Q2 amber).
+
+![Scopus search results with Quartile, SJR and H-index badges](screenshots/scopus-search.png)
+
+**ScienceDirect** — badge on its own line above the journal name.
+
+![ScienceDirect search results with journal metrics badges](screenshots/sciencedirect_search.png)
+
+**Google Scholar** — badge under the title; venues Scimago does not rank (here a "—" badge) are marked as not found.
+
+![Google Scholar search results with journal metrics badges](screenshots/scholar_search.png)
+
 ## Supported sites
 
 | Where | What you get |

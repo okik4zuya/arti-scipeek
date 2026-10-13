@@ -6,6 +6,8 @@ ARTi SciPeek is a Chrome extension (Manifest V3) that adds [Scimago Journal Rank
 metrics to the pages you already use. It works fully offline: the metrics ship inside the extension,
 so nothing is sent to any server.
 
+![ARTi SciPeek in 40 seconds: badges in search results and the edge tab on article pages](store-assets/arti-scipeek-tutorial.gif)
+
 ## Features
 
 - **Inline badges** next to each journal in Scopus and ScienceDirect search results, and in Google

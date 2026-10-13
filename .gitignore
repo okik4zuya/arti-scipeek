@@ -2,3 +2,7 @@ memory/
 CLAUDE.md
 
 *.zip
+video-src/
+node_modules/
+video-src/node_modules/
+video-src/music.wav

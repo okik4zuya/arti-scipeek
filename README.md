@@ -109,8 +109,9 @@ not load.
 
 ## Privacy
 
-ARTi SciPeek makes no network requests and collects no data. The only link it adds opens
-scimagojr.com, and only when you click it. Its only stored data is the floating tab's position and
+ARTi SciPeek makes no network requests and collects no data. It adds two links, which open only
+when you click them: the Scimago page of a journal, and the "Powered by ARTi" credit
+([arti.invait.id](https://arti.invait.id)) in the expanded floating tab. Its only stored data is the floating tab's position and
 collapsed state, kept in your browser's local storage. See `privacy-policy.html`.
 
 ## Data and licensing

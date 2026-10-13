@@ -19,6 +19,7 @@
 
   const HOST_ID = "sjm-floating-host";
   const STORE_KEY = "sjm-float";
+  const LANDING_URL = "https://arti.invait.id";
 
   // Path patterns (per host suffix) that mark a journal home page. Article pages are detected by
   // meta tags instead and need no entry here.
@@ -316,6 +317,13 @@
       background: #1c1c1e; color: #fff; text-decoration: none; font-weight: 600; font-size: 12px; }
     .link:hover { background: #38383c; }
     .note { color: #6b7280; }
+    .foot { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 12px 9px;
+      background: #f4f5f7; color: #6b7280; font-size: 11px; font-weight: 500; text-decoration: none; }
+    .foot img { width: 14px; height: 14px; border-radius: 4px; display: block; }
+    .foot b { font-weight: 800; color: #475569; letter-spacing: .01em; }
+    .foot b i { font-style: normal; color: #2563eb; }
+    .foot:hover { color: #475569; }
+    .foot:hover b { text-decoration: underline; text-underline-offset: 2px; }
     /* Saturated gradient fills so the tab stands out on any page; the hue ramp
        green > amber > orange > red keeps the Q1-Q4 hierarchy. */
     .q1 { background: linear-gradient(160deg, #22c55e, #0f9d4b); color: #fff; }
@@ -486,6 +494,21 @@
       body.appendChild(el("div", "note", "Journal not found in the bundled Scimago snapshot."));
     }
     card.appendChild(body);
+
+    // Attribution: logo + "Powered by ARTi", linking to the project landing page.
+    const foot = el("a", "foot");
+    foot.href = LANDING_URL;
+    foot.target = "_blank";
+    foot.rel = "noopener noreferrer";
+    foot.title = "ARTi — arti.invait.id";
+    const logo = document.createElement("img");
+    logo.alt = "";
+    logo.src = chrome.runtime.getURL("icons/arti-logo-48.png");
+    const brand = el("b", null, "ART");
+    brand.appendChild(el("i", null, "i"));
+    foot.append(logo, el("span", null, "Powered by"), brand);
+    card.appendChild(foot);
+
     rootEl.appendChild(card);
     applyPosition();
   }

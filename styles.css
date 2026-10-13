@@ -1,0 +1,88 @@
+/* Host pages (Google Scholar especially) ship their own, often more-specific
+   `a`/link rules (e.g. `.gs_ri a`) that would otherwise win on specificity
+   over a single-class selector and strip the badge's color/underline/font
+   styling. !important pins the badge's look so it renders identically on
+   every site instead of inheriting the host page's link styles. */
+.sjm-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  font-size: 12px !important;
+  line-height: 1.4 !important;
+  font-weight: 600 !important;
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif !important;
+  padding: 2px 9px !important;
+  border-radius: 999px !important;
+  white-space: nowrap !important;
+  background: #eef0f2 !important;
+  color: #4b5563 !important;
+  text-decoration: none !important;
+  margin: 2px 0 4px !important;
+  cursor: pointer !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18), 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease !important;
+}
+
+.sjm-badge:visited,
+.sjm-badge:active {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+.sjm-badge:hover {
+  color: inherit !important;
+  text-decoration: none !important;
+  transform: translateY(-1px) !important;
+  filter: brightness(1.06) !important;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.22) !important;
+}
+
+/* Same saturated gradient ramp as the floating badge (content-floating.js):
+   green > amber > orange > red keeps the Q1-Q4 hierarchy. */
+.sjm-badge--q1 { background: linear-gradient(160deg, #22c55e, #0f9d4b) !important; color: #fff !important; }
+.sjm-badge--q2 { background: linear-gradient(160deg, #fcd34d, #f2a900) !important; color: #2b1d00 !important; }
+.sjm-badge--q3 { background: linear-gradient(160deg, #fb923c, #e8590c) !important; color: #fff !important; }
+.sjm-badge--q4 { background: linear-gradient(160deg, #f87171, #d62839) !important; color: #fff !important; }
+.sjm-badge--empty {
+  background: #f3f4f6 !important;
+  color: #9ca3af !important;
+  font-weight: 500 !important;
+  box-shadow: none !important;
+  cursor: default !important;
+}
+
+.sjm-badge--empty:hover {
+  transform: none !important;
+  filter: none !important;
+  box-shadow: none !important;
+}
+
+/* `display: flex` (not `inline-flex`) so the badge is block-level on the
+   outside -- it always starts its own line, even right after an inline
+   element like Google Scholar profile's title `<a>` (an inline-flex sibling
+   there just flows inline and wraps into the title text instead). */
+.sjm-badge--block {
+  display: flex !important;
+  width: fit-content !important;
+}
+
+.sjm-badge__quartile {
+  font-weight: 800 !important;
+  font-size: 13px !important;
+  letter-spacing: 0.01em !important;
+  color: inherit !important;
+}
+
+.sjm-badge__text {
+  font-weight: 500 !important;
+  color: inherit !important;
+  padding-left: 6px !important;
+  border-left: 1px solid color-mix(in srgb, currentColor 40%, transparent) !important;
+}
+
+.sjm-column-header {
+  font-size: 12px;
+  font-weight: 600;
+}

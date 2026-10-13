@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>ARTi SciPeek</title>
+<link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <header class="sjm-popup__header">
+    <img src="icons/icon-48.png" width="32" height="32" alt="" />
+    <div>
+      <h1>ARTi SciPeek</h1>
+      <p class="sjm-popup__version" id="version"></p>
+    </div>
+  </header>
+
+  <p class="sjm-popup__desc">
+    Adds Quartile, SJR, and a direct Scimago link next to journals as you browse. Fully offline —
+    the metrics snapshot is bundled with the extension, nothing ever leaves your browser.
+  </p>
+
+  <div class="sjm-popup__status" id="status"></div>
+
+  <div class="sjm-popup__sites">
+    <p class="sjm-popup__label">Works on</p>
+    <ul>
+      <li>Scopus search results</li>
+      <li>ScienceDirect search results</li>
+      <li>Google Scholar search results &amp; profiles</li>
+      <li>Article &amp; journal pages: ScienceDirect, Springer, Nature, ACS, RSC, Taylor &amp; Francis, Wiley, MDPI, IOP and more (floating badge)</li>
+    </ul>
+  </div>
+
+  <footer class="sjm-popup__footer">
+    <a href="https://www.scimagojr.com" target="_blank" rel="noopener">scimagojr.com</a>
+    <span class="sjm-popup__dot">&middot;</span>
+    <span>No network requests</span>
+  </footer>
+
+  <script src="popup.js"></script>
+</body>
+</html>

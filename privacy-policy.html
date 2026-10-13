@@ -1,0 +1,408 @@
+<!doctype html>
+<title>SciPeek Privacy Policy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f7f4;
+    --surface: #ffffff;
+    --border: #e4e1d8;
+    --ink: #23241f;
+    --ink-soft: #5c5d55;
+    --ink-faint: #8a8b82;
+    --accent: #2054c9;
+    --accent-soft: #e8eefb;
+    --accent-ink: #123a8c;
+    --good: #1f7a4d;
+    --good-soft: #e6f4ec;
+    --code-bg: #f0efe8;
+    --shadow: 0 1px 2px rgba(35,36,31,0.04), 0 8px 24px -12px rgba(35,36,31,0.10);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #17181a;
+      --surface: #1f2023;
+      --border: #33342f;
+      --ink: #eceae2;
+      --ink-soft: #b3b1a6;
+      --ink-faint: #83837a;
+      --accent: #6d97f2;
+      --accent-soft: #212a3c;
+      --accent-ink: #b6cbfa;
+      --good: #6fc79a;
+      --good-soft: #1c2b23;
+      --code-bg: #26272a;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #17181a;
+    --surface: #1f2023;
+    --border: #33342f;
+    --ink: #eceae2;
+    --ink-soft: #b3b1a6;
+    --ink-faint: #83837a;
+    --accent: #6d97f2;
+    --accent-soft: #212a3c;
+    --accent-ink: #b6cbfa;
+    --good: #6fc79a;
+    --good-soft: #1c2b23;
+    --code-bg: #26272a;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "IBM Plex Sans", system-ui, sans-serif;
+    padding: 0 20px 96px;
+  }
+
+  a { color: var(--accent); }
+
+  .wrap {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  header.top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 28px 0 22px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .mark {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: linear-gradient(155deg, var(--accent) 0%, var(--accent-ink) 100%);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .mark svg { width: 19px; height: 19px; }
+
+  .top-name { font-size: 14.5px; font-weight: 600; letter-spacing: 0.01em; }
+  .top-sub { font-size: 12px; color: var(--ink-faint); margin-top: 1px; font-family: "IBM Plex Mono", monospace; }
+
+  .hero {
+    padding: 40px 0 28px;
+  }
+
+  .eyebrow {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+    background: var(--accent-soft);
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 5px;
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(28px, 5vw, 38px);
+    line-height: 1.14;
+    margin: 0 0 12px;
+    text-wrap: balance;
+    letter-spacing: -0.01em;
+  }
+
+  .dek {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    max-width: 58ch;
+    margin: 0;
+  }
+
+  .meta-row {
+    display: flex;
+    gap: 18px;
+    margin-top: 18px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 12px;
+    color: var(--ink-faint);
+    flex-wrap: wrap;
+  }
+  .meta-row span b { color: var(--ink-soft); font-weight: 500; }
+
+  .at-a-glance {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 26px 0 8px;
+    box-shadow: var(--shadow);
+  }
+  .glance-item {
+    background: var(--surface);
+    padding: 16px 16px 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .glance-icon {
+    width: 22px; height: 22px;
+    color: var(--good);
+  }
+  .glance-icon svg { width: 100%; height: 100%; }
+  .glance-label {
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  section {
+    padding: 30px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  section:last-of-type { border-bottom: none; }
+
+  .sec-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .sec-num {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 500;
+  }
+  h2 {
+    font-family: "Source Serif 4", Georgia, serif;
+    font-size: 21px;
+    font-weight: 600;
+    margin: 0;
+    letter-spacing: -0.005em;
+  }
+
+  section p, section li {
+    font-size: 15px;
+    line-height: 1.68;
+    color: var(--ink-soft);
+    margin: 0 0 12px;
+  }
+  section p:last-child, section ul:last-child { margin-bottom: 0; }
+  section strong { color: var(--ink); font-weight: 600; }
+
+  ul.plain { padding-left: 20px; margin: 0; }
+  ul.plain li { margin-bottom: 8px; }
+  ul.plain li:last-child { margin-bottom: 0; }
+
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 6px;
+    font-size: 14px;
+  }
+  .data-table th {
+    text-align: left;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    font-weight: 500;
+    padding: 0 12px 8px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .data-table td {
+    padding: 11px 12px 11px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--ink-soft);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table td:first-child, .data-table th:first-child {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 13px;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+
+  code {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.88em;
+    background: var(--code-bg);
+    padding: 0.12em 0.4em;
+    border-radius: 4px;
+    color: var(--ink);
+  }
+
+  .callout {
+    background: var(--good-soft);
+    border: 1px solid color-mix(in srgb, var(--good) 35%, var(--border));
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .callout svg { width: 17px; height: 17px; color: var(--good); flex-shrink: 0; margin-top: 2px; }
+
+  footer {
+    padding-top: 30px;
+    font-size: 13px;
+    color: var(--ink-faint);
+    line-height: 1.7;
+  }
+  footer a { color: var(--ink-soft); }
+
+  @media (max-width: 480px) {
+    .meta-row { gap: 12px 18px; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="top">
+    <div class="mark">
+      <svg viewBox="0 0 24 24" fill="none">
+        <circle cx="17" cy="6" r="3" fill="white"/>
+        <path d="M14 9v3.5a2 2 0 0 1-2 2H9.5A2 2 0 0 0 7.5 16.5V19a2 2 0 0 1-2 2H4" stroke="white" stroke-width="2.1" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div>
+      <div class="top-name">ARTi SciPeek</div>
+      <div class="top-sub">Chrome extension · privacy policy</div>
+    </div>
+  </header>
+
+  <div class="hero">
+    <span class="eyebrow">Privacy Policy</span>
+    <h1>Nothing about your browsing ever leaves your browser.</h1>
+    <p class="dek">
+      SciPeek annotates journal listings on Scopus, ScienceDirect, and Google Scholar with SJR
+      and quartile data. This page explains, plainly, what that requires — and what it doesn't.
+    </p>
+    <div class="meta-row">
+      <span>Effective <b>2026-09-13</b></span>
+      <span>Applies to <b>ARTi SciPeek</b>, all versions</span>
+    </div>
+  </div>
+
+  <div class="at-a-glance">
+    <div class="glance-item">
+      <div class="glance-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v5c0 5-3.2 8.4-7 10-3.8-1.6-7-5-7-10V6l7-3z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 12l2 2 4-4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="glance-label">No data collected</div>
+    </div>
+    <div class="glance-item">
+      <div class="glance-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M4 12h4l2-7 4 14 2-7h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9.5" stroke="currentColor" stroke-width="1.8" opacity="0.35"/></svg></div>
+      <div class="glance-label">Zero network requests</div>
+    </div>
+    <div class="glance-item">
+      <div class="glance-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M8 9h8M8 13h8M8 17h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+      <div class="glance-label">Database is bundled, not fetched</div>
+    </div>
+    <div class="glance-item">
+      <div class="glance-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.35-9.33-9.06C1.2 8.6 2.8 5.5 6 5c2-.3 3.5.7 4.5 2 .3.4.9.4 1.2 0C12.5 5.7 14 4.7 16 5c3.2.5 4.8 3.6 3.33 6.94C19 16.65 12 21 12 21z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></div>
+      <div class="glance-label">No accounts, no ads, no analytics</div>
+    </div>
+  </div>
+
+  <section>
+    <div class="sec-head"><span class="sec-num">01</span><h2>What SciPeek does</h2></div>
+    <p>
+      SciPeek is a Manifest V3 Chrome extension. When you visit a search-results or profile page
+      on <strong>Scopus</strong>, <strong>ScienceDirect</strong>, or <strong>Google Scholar</strong>,
+      it reads the journal titles and identifiers already visible on that page and looks them up
+      against a <strong>Scimago Journal Rank (SJR) snapshot bundled inside the extension itself</strong> —
+      an offline SQLite database, queried in-browser via WebAssembly (sql.js). It then renders a
+      small badge (Quartile, SJR, and a link to scimagojr.com) next to each matched journal.
+    </p>
+    <p>
+      That lookup — matching a journal title or ISSN already on your screen against a local
+      table — is the entire extent of what the extension does with page content. Nothing about it
+      requires, or performs, a network call.
+    </p>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-num">02</span><h2>What data we collect</h2></div>
+    <div class="callout">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span><strong>None.</strong> SciPeek has no server, no analytics SDK, no error-reporting
+      service, and no account system. There is nowhere for your data to go, and nothing on our
+      side ever receives it.</span>
+    </div>
+    <p style="margin-top:16px">
+      Concretely, the extension does not collect, store, or transmit: browsing history, search
+      queries, page content, personal identifiers, authentication credentials, location, or any
+      other category defined in the Chrome Web Store's data-usage disclosure. It sets no cookies
+      and uses no third-party tracking of any kind.
+    </p>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-num">03</span><h2>What happens on the page, technically</h2></div>
+    <p>
+      Content scripts read journal titles/ISSNs already rendered in the page's own DOM (the same
+      text your browser already downloaded to show you the page) and pass them, in-memory, to an
+      offscreen document running the bundled WASM database. The match result comes back the same
+      way. None of this crosses a network boundary — it's function calls within your browser, not
+      requests to any server, ours or anyone else's.
+    </p>
+    <table class="data-table">
+      <tr><th>Permission</th><th>Why SciPeek asks for it</th></tr>
+      <tr><td>offscreen</td><td>Lets sql.js keep the local WASM database alive; MV3 service workers can be suspended mid-query, so the offscreen document holds it instead.</td></tr>
+      <tr><td>activeTab</td><td>Lets the popup show which of the three supported sites the current tab is on. Only used when you open the popup yourself; nothing is read in the background.</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-num">04</span><h2>The one outbound link</h2></div>
+    <p>
+      Each badge includes a link to that journal's page on <code>scimagojr.com</code>. Clicking it
+      opens Scimago's own site in a new tab — a normal, user-initiated browser navigation, exactly
+      like clicking any other link on a webpage. SciPeek does not pre-fetch, ping, or otherwise
+      contact scimagojr.com on your behalf; the request only happens if and when you click, and it
+      goes directly from your browser to Scimago, subject to <a href="https://www.scimagojr.com" target="_blank" rel="noopener">their own privacy practices</a>, not ours.
+    </p>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-num">05</span><h2>Data retention &amp; your control</h2></div>
+    <p>
+      Since nothing is collected, there is nothing retained, sold, or shared with third parties —
+      including for the purposes of creditworthiness, lending, or advertising. Uninstalling the
+      extension removes the bundled database and all extension state from your machine
+      immediately and completely.
+    </p>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-num">06</span><h2>Changes to this policy</h2></div>
+    <p>
+      If SciPeek's data practices ever change, this policy will be updated and the "Effective"
+      date above revised accordingly, before the change ships in a new version.
+    </p>
+  </section>
+
+  <footer>
+    Questions about this policy or the extension can be raised via the SciPeek listing on the
+    Chrome Web Store.
+  </footer>
+
+</div>

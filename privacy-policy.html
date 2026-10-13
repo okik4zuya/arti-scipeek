@@ -82,13 +82,11 @@
     width: 34px;
     height: 34px;
     border-radius: 9px;
-    background: linear-gradient(155deg, var(--accent) 0%, var(--accent-ink) 100%);
     flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: block;
+    background: #fff;
+    border: 1px solid var(--border);
   }
-  .mark svg { width: 19px; height: 19px; }
 
   .top-name { font-size: 14.5px; font-weight: 600; letter-spacing: 0.01em; }
   .top-sub { font-size: 12px; color: var(--ink-faint); margin-top: 1px; font-family: "IBM Plex Mono", ui-monospace, Consolas, monospace; }
@@ -278,12 +276,7 @@
 <div class="wrap">
 
   <header class="top">
-    <div class="mark">
-      <svg viewBox="0 0 24 24" fill="none">
-        <circle cx="17" cy="6" r="3" fill="white"/>
-        <path d="M14 9v3.5a2 2 0 0 1-2 2H9.5A2 2 0 0 0 7.5 16.5V19a2 2 0 0 1-2 2H4" stroke="white" stroke-width="2.1" stroke-linecap="round"/>
-      </svg>
-    </div>
+    <img class="mark" src="icons/arti-logo-48.png" width="34" height="34" alt="ARTi">
     <div>
       <div class="top-name">ARTi SciPeek</div>
       <div class="top-sub">Chrome extension · privacy policy</div>

@@ -17,6 +17,14 @@ so nothing is sent to any server.
 
 ## Screenshots
 
+**Floating tab** on article and journal pages — collapsed (left) shows the quartile and SJR; click it to expand (right) for SJR, H-index and a Scimago link. It stays docked to the right edge and can be dragged up or down.
+
+<p>
+  <img src="screenshots/floating_badge_collapsed.png" alt="Collapsed floating tab showing Q1 and SJR 1.23" height="90">
+  &nbsp;&nbsp;&nbsp;
+  <img src="screenshots/floating_badge_expanded.png" alt="Expanded floating tab with SJR, H-index and an Open on Scimago button" height="190">
+</p>
+
 **Scopus** — badge beside each result's journal (Q4 red, Q1 green, Q2 amber).
 
 ![Scopus search results with Quartile, SJR and H-index badges](screenshots/scopus-search.png)

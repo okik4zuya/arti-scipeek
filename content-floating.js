@@ -526,6 +526,9 @@
     }
     running = true;
     try {
+      // Orphaned after an extension reload: leave whatever is on screen alone (a lookup would only
+      // return nulls and flip the tab to "not found"); a page refresh re-injects a live script.
+      if (!sjmContextAlive()) return;
       const keys = extractKeys();
       const signature = keys ? JSON.stringify(keys.entries) : null;
       if (signature === lastSignature && (signature === null || (hostEl && hostEl.isConnected))) return;
@@ -536,6 +539,7 @@
       }
       const results = await sjmLookupBatch(keys.entries);
       if (signature !== lastSignature) return; // page changed while the lookup was in flight
+      if (!sjmContextAlive()) return;
       current = { result: results.find(Boolean) || null };
       if (keys.quiet && !current.result) {
         removeHost();

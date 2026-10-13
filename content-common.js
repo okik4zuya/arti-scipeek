@@ -5,26 +5,45 @@
 
 let sjmOffscreenReady = null;
 
+// After the extension is reloaded or updated, content scripts already injected into open tabs are
+// orphaned: `chrome.runtime.id` becomes undefined and sendMessage throws "Extension context
+// invalidated". Treat that as "no result" instead of an uncaught error; a page refresh re-injects.
+function sjmContextAlive() {
+  try {
+    return !!(chrome.runtime && chrome.runtime.id);
+  } catch (_) {
+    return false;
+  }
+}
+
+function sjmSend(message) {
+  return new Promise((resolve) => {
+    if (!sjmContextAlive()) {
+      resolve(null);
+      return;
+    }
+    try {
+      chrome.runtime.sendMessage(message, (response) => {
+        // Reading lastError marks it handled (otherwise Chrome logs "Unchecked runtime.lastError").
+        resolve(chrome.runtime.lastError ? null : response || null);
+      });
+    } catch (_) {
+      resolve(null);
+    }
+  });
+}
+
 function sjmEnsureOffscreen() {
   if (!sjmOffscreenReady) {
-    sjmOffscreenReady = new Promise((resolve) => {
-      chrome.runtime.sendMessage({ type: "sjm-ensure-offscreen" }, () => resolve());
-    });
+    sjmOffscreenReady = sjmSend({ type: "sjm-ensure-offscreen" });
   }
   return sjmOffscreenReady;
 }
 
 async function sjmLookupBatch(entries) {
   await sjmEnsureOffscreen();
-  return new Promise((resolve) => {
-    chrome.runtime.sendMessage({ type: "sjm-lookup-batch", entries }, (response) => {
-      if (chrome.runtime.lastError || !response) {
-        resolve(entries.map(() => null));
-        return;
-      }
-      resolve(response.results);
-    });
-  });
+  const response = await sjmSend({ type: "sjm-lookup-batch", entries });
+  return response && response.results ? response.results : entries.map(() => null);
 }
 
 function sjmBuildBadge(result) {

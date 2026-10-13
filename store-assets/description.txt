@@ -1,0 +1,36 @@
+See a journal's Quartile, SJR and H-index right where you read, with no extra tab.
+
+ARTi SciPeek adds a colour-coded badge beside every journal name on Scopus, ScienceDirect and Google Scholar, and a slim tab on 20 publisher sites. Built for researchers, lecturers and students. Fully offline, no data collected.
+
+It shows Scimago journal metrics (journal ranking): Quartile (Q1 to Q4), SJR and H-index, with a one-click link to the journal's Scimago page.
+
+Useful for:
+• Researchers choosing where to read, cite or submit
+• Lecturers and reviewers checking the standing of a source
+• Students judging whether a paper comes from a reputable journal
+• Anyone screening a long list of search results quickly
+
+WHERE IT WORKS
+Search results: a small colour-coded badge appears beside each journal on Scopus, ScienceDirect and Google Scholar (including Scholar profile pages).
+
+Article and journal pages: a slim tab sits on the right edge of the page. It shows the quartile and SJR at a glance; click it for the full card with SJR, H-index and "Open on Scimago". Supported on Scopus, ScienceDirect, Springer, Nature, ACS, RSC, Taylor & Francis, Wiley, MDPI, IOP, IEEE Xplore, SAGE, Oxford Academic, Frontiers, Science, AIP, APS, Cambridge, De Gruyter, PLOS and Cell Press. You can drag the tab up or down.
+
+Colours at a glance: Q1 green, Q2 amber, Q3 orange, Q4 red.
+
+HOW TO USE
+1. Install the extension. There is nothing to set up and no sign-in.
+2. Search on Scopus, ScienceDirect or Google Scholar, or open an article on a supported publisher site.
+3. Read the badge or click the edge tab. Click "Open on Scimago" for the full journal profile.
+
+PRIVATE AND OFFLINE
+The Scimago data is bundled inside the extension and looked up on your own device. SciPeek makes no network requests, needs no account, and collects no data. Nothing you browse is sent anywhere.
+
+GOOD TO KNOW
+• Metrics come from a Scimago Journal & Country Rank snapshot. Journals that Scimago does not list (for example, very new ones) show no badge.
+• Matching uses the journal's ID or ISSN when the page provides it, otherwise the exact journal title.
+• Metrics are a guide, not a verdict. Use them alongside your own judgement of a paper and its field.
+
+Open source: https://github.com/okik4zuya/arti-scipeek
+Part of the ARTi research toolkit: https://arti.invait.id
+
+ARTi SciPeek is an independent project and is not affiliated with or endorsed by Scimago, Elsevier, or any publisher named above.

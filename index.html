@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ARTi SciPeek</title>
+<meta name="description" content="Journal Quartile, SJR and H-index on Scopus, ScienceDirect, Google Scholar and publisher pages. Fully offline, no data collected.">
+<link rel="icon" href="icons/icon-48.png">
+<style>
+  :root {
+    --bg: #f4f8f6; --surface: #ffffff; --border: #dde6e1; --ink: #14213d; --ink-soft: #4a5568;
+    --accent: #15803d; --accent-soft: #e3f4ea; --link: #1d4ed8; --shadow: 0 10px 30px -12px rgba(20,33,61,.25);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #12171a; --surface: #1b2125; --border: #2d363b; --ink: #eaf0ee; --ink-soft: #aab6b2;
+      --accent: #4ade80; --accent-soft: #1a2b22; --link: #8fb0ff; --shadow: 0 10px 30px -12px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #12171a; --surface: #1b2125; --border: #2d363b; --ink: #eaf0ee; --ink-soft: #aab6b2;
+    --accent: #4ade80; --accent-soft: #1a2b22; --link: #8fb0ff; --shadow: 0 10px 30px -12px rgba(0,0,0,.6);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); line-height: 1.6;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; padding: 0 16px 72px; }
+  a { color: var(--link); }
+  .wrap { max-width: 880px; margin: 0 auto; }
+  header.top { display: flex; align-items: center; gap: 12px; padding: 24px 0; }
+  header.top img { width: 40px; height: 40px; border-radius: 10px; }
+  header.top b { font-size: 17px; }
+  header.top nav { margin-left: auto; display: flex; gap: 18px; font-size: 14px; }
+  .hero { padding: 36px 0 28px; text-align: center; }
+  .hero h1 { font-size: clamp(30px, 6vw, 46px); line-height: 1.12; margin: 0 0 14px; letter-spacing: -.02em; }
+  .hero p { font-size: 18px; color: var(--ink-soft); max-width: 640px; margin: 0 auto 22px; }
+  .badges { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 26px; }
+  .b { display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; padding: 5px 14px;
+    font-weight: 700; color: #fff; font-size: 15px; box-shadow: 0 3px 10px rgba(20,33,61,.18); }
+  .b span { font-weight: 600; font-size: .85em; border-left: 1px solid rgba(255,255,255,.5); padding-left: 8px; }
+  .q1 { background: linear-gradient(#22c55e,#15803d); } .q2 { background: linear-gradient(#fcd34d,#f59e0b); color: #3b2a00; }
+  .q3 { background: linear-gradient(#fb923c,#ea580c); } .q4 { background: linear-gradient(#f87171,#dc2626); }
+  .cta { display: inline-flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+  .btn { display: inline-block; padding: 11px 22px; border-radius: 10px; font-weight: 600; text-decoration: none;
+    background: var(--ink); color: var(--bg); }
+  .btn.alt { background: transparent; color: var(--ink); border: 1px solid var(--border); }
+  .note { font-size: 13px; color: var(--ink-soft); margin-top: 12px; }
+  .shot { margin: 8px 0 8px; }
+  .shot img { display: block; width: 100%; height: auto; border-radius: 14px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+  h2 { font-size: 24px; margin: 52px 0 14px; letter-spacing: -.01em; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; box-shadow: var(--shadow); }
+  .card h3 { margin: 0 0 6px; font-size: 17px; }
+  .card p { margin: 0; color: var(--ink-soft); font-size: 15px; }
+  .sites { display: flex; flex-wrap: wrap; gap: 8px; padding: 0; list-style: none; margin: 0; }
+  .sites li { background: var(--accent-soft); color: var(--accent); border-radius: 999px; padding: 4px 12px; font-size: 14px; font-weight: 600; }
+  ol { padding-left: 22px; } ol li { margin-bottom: 6px; }
+  code { background: var(--accent-soft); padding: 1px 6px; border-radius: 5px; font-size: .92em; }
+  footer { margin-top: 56px; padding-top: 22px; border-top: 1px solid var(--border); font-size: 14px; color: var(--ink-soft); }
+  footer p { margin: 0 0 8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <img src="icons/icon-128.png" alt="">
+    <b>ARTi SciPeek</b>
+    <nav>
+      <a href="privacy-policy.html">Privacy</a>
+      <a href="https://github.com/okik4zuya/arti-scipeek">GitHub</a>
+      <a href="https://arti.invait.id">ARTi</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>See a journal's quality right where you read</h1>
+    <p>Quartile, SJR and H-index next to every journal name on Scopus, ScienceDirect, Google Scholar and 20 publisher sites. Fully offline, no data collected.</p>
+    <div class="badges" aria-label="Example badges">
+      <div class="b q1">Q1<span>SJR 1.23</span></div>
+      <div class="b q2">Q2<span>SJR 0.48</span></div>
+      <div class="b q3">Q3<span>SJR 0.31</span></div>
+      <div class="b q4">Q4<span>SJR 0.19</span></div>
+    </div>
+    <div class="cta">
+      <a class="btn" href="#install">Install</a>
+      <a class="btn alt" href="https://github.com/okik4zuya/arti-scipeek">View source</a>
+    </div>
+    <p class="note">For researchers, lecturers and students.</p>
+  </section>
+
+  <div class="shot"><img src="store-assets/screenshot-1.png" alt="Scopus search results with Quartile, SJR and H-index badges beside each journal"></div>
+
+  <h2>How it helps</h2>
+  <div class="grid">
+    <div class="card"><h3>Judge a source at a glance</h3><p>Colour-coded Q1 to Q4 badges appear beside each journal in your search results, so you can screen a long list quickly.</p></div>
+    <div class="card"><h3>A discreet tab on article pages</h3><p>A slim edge tab shows the quartile and SJR. Click it for the full card and a link to the journal's Scimago page.</p></div>
+    <div class="card"><h3>Private by design</h3><p>The Scimago data is bundled and looked up on your device. No account, no tracking, no network requests.</p></div>
+  </div>
+
+  <h2>Where it works</h2>
+  <p><strong>Search results (badges):</strong> Scopus, ScienceDirect, Google Scholar (results and profiles).</p>
+  <p><strong>Article and journal pages (edge tab):</strong></p>
+  <ul class="sites">
+    <li>Scopus</li><li>ScienceDirect</li><li>Springer</li><li>Nature</li><li>ACS</li><li>RSC</li>
+    <li>Taylor &amp; Francis</li><li>Wiley</li><li>MDPI</li><li>IOP</li><li>IEEE Xplore</li><li>SAGE</li>
+    <li>Oxford Academic</li><li>Frontiers</li><li>Science</li><li>AIP</li><li>APS</li><li>Cambridge</li>
+    <li>De Gruyter</li><li>PLOS</li><li>Cell Press</li>
+  </ul>
+
+  <div class="grid" style="margin-top:26px">
+    <div class="shot"><img src="store-assets/screenshot-2.png" alt="ScienceDirect search results with badges"></div>
+    <div class="shot"><img src="store-assets/screenshot-4.png" alt="The floating tab on an article page, collapsed and expanded"></div>
+  </div>
+
+  <h2 id="install">Install</h2>
+  <p class="note" style="margin-top:0">Chrome Web Store listing: coming soon. Until then, install from source:</p>
+  <ol>
+    <li>Download or clone <a href="https://github.com/okik4zuya/arti-scipeek">the repository</a>.</li>
+    <li>Open <code>chrome://extensions</code> and turn on <strong>Developer mode</strong>.</li>
+    <li>Click <strong>Load unpacked</strong> and choose the extension folder.</li>
+    <li>Search on Scopus, ScienceDirect or Google Scholar. Nothing to configure.</li>
+  </ol>
+
+  <h2>Data and privacy</h2>
+  <p>Journal metrics come from the <a href="https://www.scimagojr.com">Scimago Journal &amp; Country Rank</a> (based on Scopus data) and are a guide, not a verdict. Journals Scimago does not list show no badge. ARTi SciPeek makes no network requests and collects no data; its only stored data is the edge tab's position and collapsed state in your browser's local storage. Read the full <a href="privacy-policy.html">privacy policy</a>.</p>
+
+  <footer>
+    <p>ARTi SciPeek is part of the <a href="https://arti.invait.id">ARTi</a> research toolkit. Source code under the <a href="https://github.com/okik4zuya/arti-scipeek/blob/main/LICENSE">MIT License</a>; the code license does not cover the bundled Scimago data.</p>
+    <p>Not affiliated with or endorsed by Scimago, Elsevier, or any publisher named above.</p>
+  </footer>
+
+</div>
+</body>
+</html>

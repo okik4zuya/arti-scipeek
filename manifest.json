@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "ARTi SciPeek — Journal Metrics for Scopus, ScienceDirect & Scholar",
   "version": "1.0.0",
-  "description": "Adds Quartile, SJR, and a direct Scimago link to journals in Scopus, ScienceDirect, and Google Scholar. Fully offline: no network requests, no data leaves your browser.",
+  "description": "Journal Quartile, SJR and H-index on Scopus, ScienceDirect, Google Scholar and publisher pages. Fully offline, no data collected.",
   "icons": {
     "16": "icons/icon-16.png",
     "32": "icons/icon-32.png",

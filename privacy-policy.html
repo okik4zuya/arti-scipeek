@@ -1,8 +1,8 @@
 <!doctype html>
-<title>SciPeek Privacy Policy</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ARTi SciPeek Privacy Policy</title>
 <style>
   :root {
     --bg: #f7f7f4;
@@ -59,7 +59,7 @@
     margin: 0;
     background: var(--bg);
     color: var(--ink);
-    font-family: "IBM Plex Sans", system-ui, sans-serif;
+    font-family: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
     padding: 0 20px 96px;
   }
 
@@ -91,14 +91,14 @@
   .mark svg { width: 19px; height: 19px; }
 
   .top-name { font-size: 14.5px; font-weight: 600; letter-spacing: 0.01em; }
-  .top-sub { font-size: 12px; color: var(--ink-faint); margin-top: 1px; font-family: "IBM Plex Mono", monospace; }
+  .top-sub { font-size: 12px; color: var(--ink-faint); margin-top: 1px; font-family: "IBM Plex Mono", ui-monospace, Consolas, monospace; }
 
   .hero {
     padding: 40px 0 28px;
   }
 
   .eyebrow {
-    font-family: "IBM Plex Mono", monospace;
+    font-family: "IBM Plex Mono", ui-monospace, Consolas, monospace;
     font-size: 12px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -132,7 +132,7 @@
     display: flex;
     gap: 18px;
     margin-top: 18px;
-    font-family: "IBM Plex Mono", monospace;
+    font-family: "IBM Plex Mono", ui-monospace, Consolas, monospace;
     font-size: 12px;
     color: var(--ink-faint);
     flex-wrap: wrap;
@@ -181,7 +181,7 @@
     margin-bottom: 14px;
   }
   .sec-num {
-    font-family: "IBM Plex Mono", monospace;
+    font-family: "IBM Plex Mono", ui-monospace, Consolas, monospace;
     font-size: 13px;
     color: var(--accent);
     font-weight: 500;
@@ -215,7 +215,7 @@
   }
   .data-table th {
     text-align: left;
-    font-family: "IBM Plex Mono", monospace;
+    font-family: "IBM Plex Mono", ui-monospace, Consolas, monospace;
     font-size: 11px;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -233,14 +233,14 @@
   }
   .data-table tr:last-child td { border-bottom: none; }
   .data-table td:first-child, .data-table th:first-child {
-    font-family: "IBM Plex Mono", monospace;
+    font-family: "IBM Plex Mono", ui-monospace, Consolas, monospace;
     font-size: 13px;
     color: var(--ink);
     white-space: nowrap;
   }
 
   code {
-    font-family: "IBM Plex Mono", monospace;
+    font-family: "IBM Plex Mono", ui-monospace, Consolas, monospace;
     font-size: 0.88em;
     background: var(--code-bg);
     padding: 0.12em 0.4em;
@@ -294,11 +294,11 @@
     <span class="eyebrow">Privacy Policy</span>
     <h1>Nothing about your browsing ever leaves your browser.</h1>
     <p class="dek">
-      SciPeek annotates journal listings on Scopus, ScienceDirect, and Google Scholar with SJR
-      and quartile data. This page explains, plainly, what that requires — and what it doesn't.
+      SciPeek adds SJR and quartile data to journal listings on Scopus, ScienceDirect, Google
+      Scholar, and a set of publisher sites. This page explains, plainly, what that requires — and what it doesn't.
     </p>
     <div class="meta-row">
-      <span>Effective <b>2026-09-13</b></span>
+      <span>Effective <b>2026-10-13</b></span>
       <span>Applies to <b>ARTi SciPeek</b>, all versions</span>
     </div>
   </div>
@@ -325,12 +325,16 @@
   <section>
     <div class="sec-head"><span class="sec-num">01</span><h2>What SciPeek does</h2></div>
     <p>
-      SciPeek is a Manifest V3 Chrome extension. When you visit a search-results or profile page
-      on <strong>Scopus</strong>, <strong>ScienceDirect</strong>, or <strong>Google Scholar</strong>,
+      SciPeek is a Manifest V3 Chrome extension. When you visit a search-results, profile,
+      article, or journal page on <strong>Scopus</strong>, <strong>ScienceDirect</strong>,
+      <strong>Google Scholar</strong>, or one of the supported publisher sites (Springer, Nature,
+      ACS, RSC, Taylor &amp; Francis, Wiley, MDPI, IOP, IEEE Xplore, SAGE, Oxford Academic,
+      Frontiers, Science, AIP, APS, Cambridge, De Gruyter, PLOS, and Cell Press),
       it reads the journal titles and identifiers already visible on that page and looks them up
       against a <strong>Scimago Journal Rank (SJR) snapshot bundled inside the extension itself</strong> —
       an offline SQLite database, queried in-browser via WebAssembly (sql.js). It then renders a
-      small badge (Quartile, SJR, and a link to scimagojr.com) next to each matched journal.
+      small badge or a small edge tab (Quartile, SJR, H-index, and a link to scimagojr.com) next to each
+      matched journal.
     </p>
     <p>
       That lookup — matching a journal title or ISSN already on your screen against a local
@@ -348,10 +352,17 @@
       side ever receives it.</span>
     </div>
     <p style="margin-top:16px">
-      Concretely, the extension does not collect, store, or transmit: browsing history, search
+      Concretely, the extension does not collect or transmit: browsing history, search
       queries, page content, personal identifiers, authentication credentials, location, or any
       other category defined in the Chrome Web Store's data-usage disclosure. It sets no cookies
       and uses no third-party tracking of any kind.
+    </p>
+    <p>
+      The one thing it remembers is a display preference: the vertical position of the floating edge
+      tab and whether it is collapsed or expanded. This is saved in your browser's local storage for
+      the site you are visiting. It contains no information about you or what you read, and it never
+      leaves your browser. Because it lives in that site's own local storage, the site can in
+      principle read it, and it is removed by clearing that site's data, not by uninstalling.
     </p>
   </section>
 
@@ -367,7 +378,8 @@
     <table class="data-table">
       <tr><th>Permission</th><th>Why SciPeek asks for it</th></tr>
       <tr><td>offscreen</td><td>Lets sql.js keep the local WASM database alive; MV3 service workers can be suspended mid-query, so the offscreen document holds it instead.</td></tr>
-      <tr><td>activeTab</td><td>Lets the popup show which of the three supported sites the current tab is on. Only used when you open the popup yourself; nothing is read in the background.</td></tr>
+      <tr><td>activeTab</td><td>Lets the popup show whether SciPeek is active on the current tab's site. Only used when you open the popup yourself; nothing is read in the background.</td></tr>
+      <tr><td>site access</td><td>The content scripts run only on the supported sites listed above, to read the journal name or ISSN on the page and insert the badge or tab. No page content leaves the browser.</td></tr>
     </table>
   </section>
 
@@ -383,7 +395,9 @@
     <p>
       The expanded floating badge also carries a small "Powered by ARTi" credit that links to
       <code>arti.invait.id</code>. It works the same way: nothing is loaded from that site, and it
-      is contacted only if you click the link. The logo image is bundled inside the extension.
+      is contacted only if you click the link. The logo image is bundled inside the extension. The
+      toolbar popup additionally links to this project's source code on GitHub, again opened only
+      when you click it.
     </p>
   </section>
 
@@ -392,8 +406,9 @@
     <p>
       Since nothing is collected, there is nothing retained, sold, or shared with third parties —
       including for the purposes of creditworthiness, lending, or advertising. Uninstalling the
-      extension removes the bundled database and all extension state from your machine
-      immediately and completely.
+      extension removes the bundled database and all extension state from your machine. The only
+      leftover is the tab-position preference described above, kept in each visited site's local
+      storage until you clear that site's data.
     </p>
   </section>
 
@@ -406,8 +421,8 @@
   </section>
 
   <footer>
-    Questions about this policy or the extension can be raised via the SciPeek listing on the
-    Chrome Web Store.
+    Questions about this policy or the extension can be raised as an issue at
+    <a href="https://github.com/okik4zuya/arti-scipeek/issues">github.com/okik4zuya/arti-scipeek</a>.
   </footer>
 
 </div>

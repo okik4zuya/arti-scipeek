@@ -122,8 +122,21 @@ when you click them: the Scimago page of a journal, and the "Powered by ARTi" cr
 ([arti.invait.id](https://arti.invait.id)) in the expanded floating tab. Its only stored data is the floating tab's position and
 collapsed state, kept in your browser's local storage. See `privacy-policy.html`.
 
+## License
+
+The source code is released under the [MIT License](LICENSE). The MIT License covers the code only,
+not the bundled journal data or the vendored [sql.js](https://github.com/sql-js/sql.js) library,
+which keep their own terms (see below).
+
 ## Data and licensing
 
 Journal metrics are derived from the [Scimago Journal & Country Rank](https://www.scimagojr.com)
-(based on Scopus data). Check Scimago's terms of use before redistributing the bundled snapshot.
+(based on Scopus data from Elsevier). Scimago's site states: "All the information shown in the
+SCImago Journal Country & Rank website can be used for non-commercial purposes as long as it is
+cited." ARTi SciPeek is free and non-commercial, and credits Scimago in its popup and on every card
+(link to the journal's Scimago page). The bundled `assets/journals.sqlite` is a trimmed subset
+(title, ISSN, SJR, quartile, H-index) of a Scimago download. It is not covered by the MIT License and
+stays under Scimago's terms, so if you reuse it, keep it non-commercial and cite: SCImago, (n.d.).
+*SJR-SCImago Journal Country & Rank* [Portal]. Retrieved (date), from https://www.scimagojr.com.
+If you are a rights holder and want the data removed, open an issue.
 ARTi SciPeek is not affiliated with or endorsed by Scimago, Elsevier, or any publisher listed above.

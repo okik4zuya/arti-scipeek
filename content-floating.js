@@ -19,7 +19,7 @@
 
   const HOST_ID = "sjm-floating-host";
   const STORE_KEY = "sjm-float";
-  const LANDING_URL = "https://arti.invait.id";
+  const LANDING_URL = "https://arti.ai.id";
 
   // Path patterns (per host suffix) that mark a journal home page. Article pages are detected by
   // meta tags instead and need no entry here.
@@ -500,7 +500,7 @@
     foot.href = LANDING_URL;
     foot.target = "_blank";
     foot.rel = "noopener noreferrer";
-    foot.title = "ARTi — arti.invait.id";
+    foot.title = "ARTi — arti.ai.id";
     const logo = document.createElement("img");
     logo.alt = "";
     logo.src = chrome.runtime.getURL("icons/arti-logo-48.png");

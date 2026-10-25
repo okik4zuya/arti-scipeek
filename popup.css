@@ -63,6 +63,8 @@ body {
 .sjm-chip--q2 { background: linear-gradient(160deg, #fcd34d, #f2a900); color: #2b1d00; }
 .sjm-chip--q3 { background: linear-gradient(160deg, #fb923c, #e8590c); color: #fff; }
 .sjm-chip--q4 { background: linear-gradient(160deg, #f87171, #d62839); color: #fff; }
+/* SINTA (Indonesian accreditation S1-S6): its own navy, outside the quartile ramp. */
+.sjm-chip--sinta { flex: 2; background: linear-gradient(160deg, #3b6fb6, #1e3a5f); color: #fff; }
 
 .sjm-popup__status {
   margin: 10px 0 0;

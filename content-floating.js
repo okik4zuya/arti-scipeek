@@ -40,7 +40,10 @@
     [/cell\.com$/, /\/home$/],
   ];
 
-  const URL_ISSN_RE = /\/journal\/(\d{4}-?\d{3}[\dXx])(?:[/?#]|$)/;
+  // Hosts matched by a wildcard rather than by publisher (see manifest.json): journal pages only.
+  const GENERIC_HOST_RE = /\.ac\.id$/i;
+
+  const URL_ISSN_RE =/\/journal\/(\d{4}-?\d{3}[\dXx])(?:[/?#]|$)/;
   const TEXT_ISSN_RE = /(?:e-?ISSN|ISSN)\b[^0-9]{0,40}(\d{4}-\d{3}[\dXx])/gi;
 
   function normIssn(s) {
@@ -114,14 +117,46 @@
     return JOURNAL_PATHS.some(([h, p]) => h.test(host) && p.test(location.pathname));
   }
 
+  // innerText forces a layout (17-19 ms on a 4,400-node page), so it is read at most once per
+  // extractKeys() run and shared between the ISSN scan and the ISSN count.
+  let textCache = null;
+  function pageText(limit) {
+    if (textCache === null) {
+      const root = document.querySelector("main") || document.body;
+      textCache = root && root.innerText ? root.innerText : "";
+    }
+    return textCache.slice(0, limit);
+  }
+
   function scanTextIssns(limit) {
-    const root = document.querySelector("main") || document.body;
-    const text = (root && root.innerText ? root.innerText : "").slice(0, limit);
+    const text = pageText(limit);
     const found = [];
     TEXT_ISSN_RE.lastIndex = 0;
     let m;
     while ((m = TEXT_ISSN_RE.exec(text)) && found.length < 4) found.push(m[1]);
     return found;
+  }
+
+  // ISSN check digit (mod 11): rejects look-alikes such as page ranges ("3932-3949").
+  function validIssn(s) {
+    const d = s.replace("-", "").toUpperCase();
+    let sum = 0;
+    for (let i = 0; i < 7; i++) sum += Number(d[i]) * (8 - i);
+    const check = (11 - (sum % 11)) % 11;
+    return d[7] === (check === 10 ? "X" : String(check));
+  }
+
+  // Distinct valid ISSNs printed right after the word "ISSN" anywhere in the page text, capped at 10.
+  function countTextIssns(limit) {
+    const text = pageText(limit);
+    const found = new Set();
+    for (const m of text.matchAll(/ISSN/gi)) {
+      for (const c of text.slice(m.index, m.index + 70).matchAll(/\b\d{4}-\d{3}[\dXx]\b/g)) {
+        if (validIssn(c[0])) found.add(c[0].toUpperCase());
+      }
+      if (found.size >= 10) break;
+    }
+    return found.size;
   }
 
   // Scopus exposes the Scimago sourceid directly: in the URL on source pages
@@ -186,10 +221,12 @@
   // Returns {kind, entries} where entries are lookup keys tried in order, or null when this page
   // is neither an article nor a recognisable journal home page.
   function extractKeys() {
+    textCache = null; // fresh page text for this run (the page may have changed since the last one)
     const scopus = scopusKeys();
     if (scopus) return scopus;
     if (/(^|\.)scopus\.com$/.test(location.hostname)) return null;
     const meta = readMeta();
+    const isOjs = /open journal systems/i.test(firstMeta(meta, "generator") || "");
 
     const metaIssns = uniq(
       [
@@ -197,9 +234,10 @@
         ...(meta.get("citation_eissn") || []),
         ...(meta.get("prism.issn") || []),
         ...(meta.get("prism.eissn") || []),
+        ...(meta.get("dc.source.issn") || []), // Open Journal Systems (OJS)
       ].map(normIssn)
     );
-    const metaTitle = firstMeta(meta, "citation_journal_title", "prism.publicationname");
+    const metaTitle = firstMeta(meta, "citation_journal_title", "prism.publicationname", "dc.source");
 
     const isArticle =
       meta.has("citation_title") ||
@@ -217,6 +255,40 @@
       }
       const found = buildEntries("article", issns, titles);
       if (found) return found;
+    }
+
+    // Any university site (*.ac.id) is matched, but only article pages with a journal key and OJS
+    // pages are journal pages. Everything else (campus and faculty home pages) must not reach the
+    // title-guess fallback below: its lookup would wake the offscreen document and load ~9 MB of
+    // databases for a page that has nothing to show.
+    if (GENERIC_HOST_RE.test(location.hostname) && !isOjs) return null;
+
+    // Open Journal Systems (home, archive, about, issue pages): no citation meta outside articles, but
+    // the ISSN is printed in the page text ("ISSN 2338-6061 (Online) || 2685-7111 (Print)"). The
+    // journal name is only a fallback: a generic heading such as "Archives" must not add a
+    // wrong Scimago hit next to an ISSN match, so titles are skipped when an ISSN was found.
+    if (isOjs) {
+      // An OJS site-level page (a campus's journal listing, e.g. journal.umy.ac.id) is not one
+      // journal: show nothing. Markers: the default theme's .page_index_site, an
+      // /index.php/index URL, and -- for custom themes -- more ISSNs in the text than one
+      // journal has (online + print; a site listing shows dozens).
+      if (
+        document.querySelector(".page_index_site") ||
+        /\/index(?:\.php)?\/index(?:[/?#]|$)/.test(location.pathname) ||
+        countTextIssns(60000) > 3
+      ) {
+        return null;
+      }
+      const issns = uniq(scanTextIssns(40000).map(normIssn));
+      const titles = issns.length
+        ? []
+        : uniq([
+            ...titleVariants((document.querySelector("h1") || {}).textContent),
+            ...titleVariants(firstMeta(meta, "og:title")),
+            ...titleVariants(document.title),
+          ]);
+      const found = buildEntries("journal", issns, titles);
+      return found && { ...found, quiet: true };
     }
 
     const itemprop = Array.from(document.querySelectorAll('[itemprop="issn"]')).map((el) =>
@@ -299,6 +371,8 @@
       padding: 4px 0 3px; border-radius: 11px; background: rgba(255,255,255,.22); }
     .tab .lbl { font-weight: 600; font-size: 8px; letter-spacing: .08em; opacity: .85; }
     .tab .val { font-weight: 700; font-size: 12px; line-height: 1.15; }
+    /* "IMPACT" is 6 letters: tighter and smaller so it fits the 36px inner width without touching the edges. */
+    .tab .lbl.long { font-size: 7px; letter-spacing: .02em; }
     .card { width: 232px; background: #fff; border-radius: 18px 0 0 18px; overflow: hidden;
       box-shadow: -8px 10px 32px rgba(0,0,0,.28), -1px 1px 4px rgba(0,0,0,.15); }
     .head { display: flex; align-items: center; gap: 8px; padding: 10px 10px 10px 12px; }
@@ -313,7 +387,9 @@
     .stat { background: #f4f5f7; border-radius: 12px; padding: 8px 10px; }
     .stat .v { font-weight: 800; font-size: 18px; line-height: 1.15; letter-spacing: -.01em; }
     .stat .k { font-size: 10px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: #6b7280; }
-    .link { display: block; margin-top: 10px; padding: 8px 10px; border-radius: 10px; text-align: center;
+    .links { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    /* Two buttons per row; a third (SINTA) wraps onto its own full-width row. */
+    .link { display: block; flex: 1 1 calc(50% - 3px); padding: 8px 10px; border-radius: 10px; text-align: center;
       background: #1c1c1e; color: #fff; text-decoration: none; font-weight: 600; font-size: 12px; }
     .link:hover { background: #38383c; }
     .note { color: #6b7280; }
@@ -331,6 +407,16 @@
     .q3 { background: linear-gradient(160deg, #fb923c, #e8590c); color: #fff; }
     .q4 { background: linear-gradient(160deg, #f87171, #d62839); color: #fff; }
     .none { background: #fff; color: #888; font-weight: 500; }
+    /* SINTA: navy, outside the Q1-Q4 ramp so the two scales are never read as one. */
+    .sinta { background: linear-gradient(160deg, #3b6fb6, #1e3a5f); color: #fff; }
+    .tab .spill { margin-top: -1px; padding: 2px 8px; border-radius: 999px; font-weight: 800; font-size: 10px;
+      background: #1e3a5f; color: #fff; }
+    .sblock { margin-top: 10px; padding-top: 10px; border-top: 1px solid #e5e7eb; }
+    .sblock.first { margin-top: 0; padding-top: 0; border-top: 0; }
+    .shead { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .schip { border-radius: 999px; padding: 2px 10px; font-weight: 800; font-size: 12px;
+      background: linear-gradient(160deg, #3b6fb6, #1e3a5f); color: #fff; }
+    .flags { margin-top: 8px; font-size: 11px; }
   `;
 
   let hostEl = null;
@@ -440,21 +526,34 @@
     if (!rootEl) return;
     rootEl.replaceChildren();
     const result = current && current.result;
-    const quartile = result ? result.sjr_best_quartile || "?" : "—";
-    const qClass = result ? (result.sjr_best_quartile || "").toLowerCase() : "none";
+    const scimago = result && result.scimago;
+    const sinta = result && result.sinta;
+    // Scimago leads (quartile colour); a SINTA-only journal gets the navy SINTA look instead.
+    const quartile = scimago ? scimago.sjr_best_quartile || "?" : sinta ? `S${sinta.level}` : "—";
+    const qClass = scimago ? (scimago.sjr_best_quartile || "").toLowerCase() : sinta ? "sinta" : "none";
 
     if (prefs.collapsed) {
       const tab = el("button", `tab ${qClass}`);
       tab.type = "button";
       tab.title = result
         ? "ARTi SciPeek — click for details, drag to move up/down"
-        : "Not found in the bundled Scimago snapshot";
+        : "Not found in the bundled Scimago or SINTA snapshots";
       tab.appendChild(el("span", "q", quartile));
-      if (result) {
-        const sjr = el("span", "sjr");
-        sjr.appendChild(el("span", "lbl", "SJR"));
-        sjr.appendChild(el("span", "val", result.sjr != null ? Number(result.sjr).toFixed(2) : "?"));
-        tab.appendChild(sjr);
+      const mini = (label, value) => {
+        const box = el("span", "sjr");
+        box.appendChild(el("span", label.length > 4 ? "lbl long" : "lbl", label));
+        box.appendChild(el("span", "val", value));
+        tab.appendChild(box);
+      };
+      // The tab is 46px wide: keep the figure to at most 4 characters ("1.63", "26.0", "104").
+      const tabNumber = (n) => (n < 10 ? n.toFixed(2) : n < 100 ? n.toFixed(1) : String(Math.round(n)));
+      if (scimago) {
+        mini("SJR", scimago.sjr != null ? Number(scimago.sjr).toFixed(2) : "?");
+        if (sinta) tab.appendChild(el("span", "spill", `S${sinta.level}`));
+      } else if (sinta) {
+        // Impact when SINTA has it (it is missing for over half of the journals), else H5.
+        if (sinta.impact != null) mini("IMPACT", tabNumber(Number(sinta.impact)));
+        else if (sinta.h5_index != null) mini("H5", String(sinta.h5_index));
       }
       makeDraggable(tab, () => setCollapsed(false));
       rootEl.appendChild(tab);
@@ -464,7 +563,7 @@
 
     const card = el("div", "card");
     const head = el("div", `head ${qClass}`);
-    head.appendChild(el("span", "chip", quartile));
+    head.appendChild(el("span", "chip", scimago || !sinta ? quartile : `SINTA ${sinta.level}`));
     head.appendChild(el("span", "brand", "ARTi SciPeek"));
     const min = el("button", "x", "–");
     min.type = "button";
@@ -476,22 +575,55 @@
 
     const body = el("div", "body");
     if (result) {
-      const sjr = result.sjr != null ? Number(result.sjr).toFixed(3) : "?";
       const stat = (k, v) => {
         const s = el("div", "stat");
         s.append(el("div", "v", String(v)), el("div", "k", k));
         return s;
       };
-      const stats = el("div", "stats");
-      stats.append(stat("SJR", sjr), stat("H-index", result.h_index != null ? result.h_index : "?"));
-      body.appendChild(stats);
-      const link = el("a", "link", "Open on Scimago ↗");
-      link.href = `https://www.scimagojr.com/journalsearch.php?q=${result.sourceid}&tip=sid`;
-      link.target = "_blank";
-      link.rel = "noopener noreferrer";
-      body.appendChild(link);
+      const links = el("div", "links");
+      const addLink = (label, href, title) => {
+        const link = el("a", "link", label);
+        link.href = href;
+        link.title = title;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        links.appendChild(link);
+      };
+
+      if (scimago) {
+        const sjr = scimago.sjr != null ? Number(scimago.sjr).toFixed(3) : "?";
+        const stats = el("div", "stats");
+        stats.append(stat("SJR", sjr), stat("H-index", scimago.h_index != null ? scimago.h_index : "?"));
+        body.appendChild(stats);
+        // Scimago sourceid == Scopus source id, so the Scopus journal page needs no extra data.
+        addLink("Scimago ↗", `https://www.scimagojr.com/journalsearch.php?q=${scimago.sourceid}&tip=sid`, "Open on Scimago");
+        addLink("Scopus ↗", `https://www.scopus.com/sourceid/${scimago.sourceid}`, "Journal page on Scopus");
+      }
+
+      if (sinta) {
+        // SINTA is a national accreditation (S1 best), a different scale from Scimago's quartiles.
+        const block = el("div", scimago ? "sblock" : "sblock first");
+        // The header chip already says "SINTA n" when SINTA is the only source.
+        const sh = el("div", "shead");
+        if (scimago) sh.appendChild(el("span", "schip", `SINTA ${sinta.level}`));
+        sh.appendChild(el("span", "note", scimago ? "national accreditation" : "SINTA national accreditation"));
+        block.appendChild(sh);
+        const tiles = [["Impact", sjmSintaImpact(sinta)], ["H5-index", sinta.h5_index]];
+        if (!scimago) tiles.push(["Citations 5yr", sinta.citations_5yr], ["Citations", sinta.citations]);
+        const shown = tiles.filter(([, v]) => v != null);
+        if (shown.length) {
+          const grid = el("div", "stats");
+          shown.forEach(([k, v]) => grid.appendChild(stat(k, typeof v === "number" ? v.toLocaleString() : v)));
+          block.appendChild(grid);
+        }
+        const indexed = [sinta.scopus ? "Scopus" : null, sinta.garuda ? "Garuda" : null].filter(Boolean);
+        if (indexed.length) block.appendChild(el("div", "note flags", `Indexed in ${indexed.join(" · ")} (per SINTA)`));
+        body.appendChild(block);
+        addLink("SINTA ↗", sjmSintaUrl(sinta), "Open on SINTA");
+      }
+      body.appendChild(links);
     } else {
-      body.appendChild(el("div", "note", "Journal not found in the bundled Scimago snapshot."));
+      body.appendChild(el("div", "note", "Journal not found in the bundled Scimago or SINTA snapshots."));
     }
     card.appendChild(body);
 
@@ -516,6 +648,7 @@
   // ---- Lifecycle ----------------------------------------------------------------------------
 
   let lastSignature = null;
+  let renderedHref = null;
   let running = false;
   let rerun = false;
 
@@ -529,6 +662,8 @@
       // Orphaned after an extension reload: leave whatever is on screen alone (a lookup would only
       // return nulls and flip the tab to "not found"); a page refresh re-injects a live script.
       if (!sjmContextAlive()) return;
+      // Already showing a result for this URL: the retry timers below have nothing left to do.
+      if (renderedHref === location.href && hostEl && hostEl.isConnected) return;
       const keys = extractKeys();
       const signature = keys ? JSON.stringify(keys.entries) : null;
       if (signature === lastSignature && (signature === null || (hostEl && hostEl.isConnected))) return;
@@ -540,13 +675,14 @@
       const results = await sjmLookupBatch(keys.entries);
       if (signature !== lastSignature) return; // page changed while the lookup was in flight
       if (!sjmContextAlive()) return;
-      current = { result: results.find(Boolean) || null };
+      current = { result: sjmMergeResults(results) };
       if (keys.quiet && !current.result) {
         removeHost();
         return;
       }
       ensureHost();
       render();
+      if (current.result) renderedHref = location.href; // a "not found" card keeps retrying
     } finally {
       running = false;
       if (rerun) {

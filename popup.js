@@ -36,6 +36,7 @@ const LABELS = {
   "degruyterbrill.com": "De Gruyter",
   "journals.plos.org": "PLOS",
   "cell.com": "Cell Press",
+  "ac.id": "Indonesian university journal (OJS)",
 };
 
 function matchHost(host) {

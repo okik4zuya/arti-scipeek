@@ -287,11 +287,12 @@
     <span class="eyebrow">Privacy Policy</span>
     <h1>Nothing about your browsing ever leaves your browser.</h1>
     <p class="dek">
-      SciPeek adds SJR and quartile data to journal listings on Scopus, ScienceDirect, Google
-      Scholar, and a set of publisher sites. This page explains, plainly, what that requires — and what it doesn't.
+      SciPeek adds SJR, quartile and SINTA accreditation data to journal listings on Scopus,
+      ScienceDirect, Google Scholar, a set of publisher sites, and Indonesian university journal sites.
+      This page explains, plainly, what that requires — and what it doesn't.
     </p>
     <div class="meta-row">
-      <span>Effective <b>2026-10-13</b></span>
+      <span>Effective <b>2026-10-13</b> · updated <b>2026-10-25</b></span>
       <span>Applies to <b>ARTi SciPeek</b>, all versions</span>
     </div>
   </div>
@@ -322,12 +323,20 @@
       article, or journal page on <strong>Scopus</strong>, <strong>ScienceDirect</strong>,
       <strong>Google Scholar</strong>, or one of the supported publisher sites (Springer, Nature,
       ACS, RSC, Taylor &amp; Francis, Wiley, MDPI, IOP, IEEE Xplore, SAGE, Oxford Academic,
-      Frontiers, Science, AIP, APS, Cambridge, De Gruyter, PLOS, and Cell Press),
+      Frontiers, Science, AIP, APS, Cambridge, De Gruyter, PLOS, and Cell Press), or a journal
+      page on an Indonesian university site (a domain ending in <code>.ac.id</code>, typically an
+      Open Journal Systems site),
       it reads the journal titles and identifiers already visible on that page and looks them up
-      against a <strong>Scimago Journal Rank (SJR) snapshot bundled inside the extension itself</strong> —
-      an offline SQLite database, queried in-browser via WebAssembly (sql.js). It then renders a
-      small badge or a small edge tab (Quartile, SJR, H-index, and a link to scimagojr.com) next to each
-      matched journal.
+      against two snapshots <strong>bundled inside the extension itself</strong>: the
+      <strong>Scimago Journal Rank (SJR)</strong> data and the <strong>SINTA</strong> journal
+      accreditation data (the Indonesian national ranking, S1 to S6). Both are offline SQLite
+      databases, queried in-browser via WebAssembly (sql.js). It then renders a
+      small badge or a small edge tab (Quartile, SJR, H-index, SINTA level and metrics, and links to scimagojr.com,
+      scopus.com and sinta.kemdiktisaintek.go.id) next to each matched journal.
+    </p>
+    <p>
+      On <code>.ac.id</code> sites the extension only acts on article pages and journal pages; it
+      does nothing on other pages of those sites, such as a university's home page.
     </p>
     <p>
       That lookup — matching a journal title or ISSN already on your screen against a local
@@ -372,18 +381,23 @@
       <tr><th>Permission</th><th>Why SciPeek asks for it</th></tr>
       <tr><td>offscreen</td><td>Lets sql.js keep the local WASM database alive; MV3 service workers can be suspended mid-query, so the offscreen document holds it instead.</td></tr>
       <tr><td>activeTab</td><td>Lets the popup show whether SciPeek is active on the current tab's site. Only used when you open the popup yourself; nothing is read in the background.</td></tr>
-      <tr><td>site access</td><td>The content scripts run only on the supported sites listed above, to read the journal name or ISSN on the page and insert the badge or tab. No page content leaves the browser.</td></tr>
+      <tr><td>site access</td><td>The content scripts run only on the supported sites listed above (including domains ending in <code>.ac.id</code>), to read the journal name or ISSN on the page and insert the badge or tab. No page content leaves the browser.</td></tr>
     </table>
   </section>
 
   <section>
     <div class="sec-head"><span class="sec-num">04</span><h2>The outbound links</h2></div>
     <p>
-      Each badge includes a link to that journal's page on <code>scimagojr.com</code>. Clicking it
-      opens Scimago's own site in a new tab — a normal, user-initiated browser navigation, exactly
+      Each badge includes a link to that journal's page on <code>scimagojr.com</code> and a second
+      link to the same journal's source page on <code>scopus.com</code>; a journal ranked by SINTA also
+      links to its profile on <code>sinta.kemdiktisaintek.go.id</code>. Clicking any of them opens that
+      site in a new tab — a normal, user-initiated browser navigation, exactly
       like clicking any other link on a webpage. SciPeek does not pre-fetch, ping, or otherwise
-      contact scimagojr.com on your behalf; the request only happens if and when you click, and it
-      goes directly from your browser to Scimago, subject to <a href="https://www.scimagojr.com" target="_blank" rel="noopener">their own privacy practices</a>, not ours.
+      contact scimagojr.com, scopus.com or sinta.kemdiktisaintek.go.id on your behalf; the request only happens if and when you click, and it
+      goes directly from your browser to that site, subject to <a href="https://www.scimagojr.com" target="_blank" rel="noopener">Scimago's</a>,
+      <a href="https://www.scopus.com" target="_blank" rel="noopener">Scopus's</a> or
+      <a href="https://sinta.kemdiktisaintek.go.id" target="_blank" rel="noopener">SINTA's</a> own privacy practices, not ours.
+      Scopus may ask you to sign in or use institutional access before it shows the page.
     </p>
     <p>
       The expanded floating badge also carries a small "Powered by ARTi" credit that links to

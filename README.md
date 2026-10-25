@@ -1,9 +1,10 @@
 # ARTi SciPeek
 
-**See a journal's quartile, SJR and H-index while you browse — right where you read about it.**
+**See a journal's quartile, SJR, H-index and SINTA rank while you browse — right where you read about it.**
 
 ARTi SciPeek is a Chrome extension (Manifest V3) that adds [Scimago Journal Rank](https://www.scimagojr.com)
-metrics to the pages you already use. It works fully offline: the metrics ship inside the extension,
+metrics, and the [SINTA](https://sinta.kemdiktisaintek.go.id) accreditation of Indonesian journals,
+to the pages you already use. It works fully offline: the data ships inside the extension,
 so nothing is sent to any server.
 
 ![ARTi SciPeek in 40 seconds: badges in search results and the edge tab on article pages](store-assets/arti-scipeek-tutorial.gif)
@@ -14,12 +15,19 @@ so nothing is sent to any server.
   Scholar search results and author profiles.
 - **Floating tab** docked to the right edge of article and journal pages on major publisher sites.
   It shows the quartile and SJR; click it for SJR, H-index and a link to the journal's Scimago page.
-- **Consistent colour ramp:** Q1 green, Q2 amber, Q3 orange, Q4 red.
+- **SINTA rank for Indonesian journals:** a navy "SINTA 1" to "SINTA 6" segment on the badge, and a
+  SINTA block in the floating card (Impact, H5-index, citations, Scopus/Garuda indexing, link to the
+  SINTA profile). Journals that only SINTA knows get a navy badge of their own. SINTA is the national
+  accreditation, a different scale from the Scimago quartiles, and the two are never merged.
+- **Indonesian university journals:** the floating tab also works on journal and article pages of
+  Open Journal Systems (OJS) sites on `*.ac.id` domains. It stays out of the way on a university's
+  other pages and on a campus's journal listing page.
+- **Consistent colour ramp:** Q1 green, Q2 amber, Q3 orange, Q4 red; SINTA in navy.
 - **Private by design:** no network requests, no tracking, no accounts.
 
 ## Screenshots
 
-**Floating tab** on article and journal pages — collapsed (left) shows the quartile and SJR; click it to expand (right) for SJR, H-index and a Scimago link. It stays docked to the right edge and can be dragged up or down.
+**Floating tab** on article and journal pages — collapsed (left) shows the quartile and SJR; click it to expand (right) for SJR, H-index and links to the journal's Scimago and Scopus pages (Scopus may ask you to sign in). It stays docked to the right edge and can be dragged up or down.
 
 <p>
   <img src="screenshots/floating_badge_collapsed.png" alt="Collapsed floating tab showing Q1 and SJR 1.23" height="90">
@@ -47,6 +55,7 @@ so nothing is sent to any server.
 | ScienceDirect | Inline badges in search results; floating tab on article and journal pages |
 | Google Scholar (all country domains) | Inline badges in results and profile publication lists |
 | Springer, Nature, ACS, RSC, Taylor & Francis, Wiley, MDPI, IOP, IEEE Xplore, SAGE, Oxford Academic, Frontiers, Science (AAAS), AIP, APS, Cambridge, De Gruyter, PLOS, Cell Press | Floating tab on article and journal pages |
+| Indonesian university journals: OJS sites on `*.ac.id` (e.g. `jurnal.untirta.ac.id`, `journal.uny.ac.id`) | Floating tab on article and journal pages, with the SINTA rank |
 
 Publisher sites change their markup, so coverage varies. If a page shows no badge, see
 [Troubleshooting](#troubleshooting).
@@ -64,14 +73,19 @@ After changing any file, click **Reload** on the extension card and refresh the 
 
 1. A content script finds the journal on the page: from a Scopus source id, an ISSN in the page
    metadata or URL, or, as a last resort, an exact journal-title match.
-2. It asks an offscreen document that holds a bundled SQLite database of Scimago data, queried
+2. It asks an offscreen document that holds two bundled SQLite databases (Scimago and SINTA), queried
    in the browser with [sql.js](https://github.com/sql-js/sql.js) (SQLite compiled to WebAssembly).
 3. The result is drawn as an inline badge or as the floating tab (in a Shadow DOM, so site styles
    cannot break it).
 
 Matching is exact for Scopus (source id) and ISSN-based on most publishers. Google Scholar exposes
 only free text, so it falls back to normalised title matching, which can miss unusual abbreviations.
-Conference proceedings, theses, books and preprints are not ranked by Scimago and show "—".
+Once Scimago has identified a journal, SINTA is joined by ISSN only, never by title, because some
+Indonesian journals share a name with an international one. Conference proceedings, theses, books and
+preprints are not ranked by Scimago and show "—".
+
+On OJS pages the journal is identified from the `citation_*` / `DC.Source.ISSN` meta tags (articles)
+or from the ISSN printed on the page (journal home pages).
 
 ## Project layout
 
@@ -86,6 +100,7 @@ Conference proceedings, theses, books and preprints are not ranked by Scimago an
 | `styles.css` | Inline badge styles |
 | `popup.*` | Toolbar popup |
 | `assets/journals.sqlite` | Trimmed Scimago snapshot (id, title, ISSN, SJR, quartile, H-index) |
+| `assets/sinta.sqlite` | Trimmed SINTA snapshot (ISSN, level S1-S6, Impact, H5-index, citations, Scopus/Garuda flags) |
 | `lib/` | Vendored sql.js |
 
 ## Updating the data
@@ -93,6 +108,10 @@ Conference proceedings, theses, books and preprints are not ranked by Scimago an
 The bundled snapshot comes from Scimago's yearly export. To refresh it, rebuild
 `assets/journals.sqlite` from the new year's export with the same columns, then reload the extension
 (and bump `version` in `manifest.json` if you publish it).
+
+The SINTA snapshot was collected on 2026-10-25 from the public journal list of
+[SINTA](https://sinta.kemdiktisaintek.go.id) (16,768 accredited journals) and is rebuilt into
+`assets/sinta.sqlite`. SINTA changes with each accreditation period, so the snapshot ages.
 
 ## Adding a publisher
 
@@ -119,8 +138,8 @@ not load.
 
 ## Privacy
 
-ARTi SciPeek makes no network requests and collects no data. It adds two links, which open only
-when you click them: the Scimago page of a journal, and the "Powered by ARTi" credit
+ARTi SciPeek makes no network requests and collects no data. It adds a few links, which open only
+when you click them: the Scimago, Scopus and SINTA pages of a journal, and the "Powered by ARTi" credit
 ([arti.ai.id](https://arti.ai.id)) in the expanded floating tab. Its only stored data is the floating tab's position and
 collapsed state, kept in your browser's local storage. See `privacy-policy.html`.
 
@@ -141,4 +160,12 @@ cited." ARTi SciPeek is free and non-commercial, and credits Scimago in its popu
 stays under Scimago's terms, so if you reuse it, keep it non-commercial and cite: SCImago, (n.d.).
 *SJR-SCImago Journal Country & Rank* [Portal]. Retrieved (date), from https://www.scimagojr.com.
 If you are a rights holder and want the data removed, open an issue.
-ARTi SciPeek is not affiliated with or endorsed by Scimago, Elsevier, or any publisher listed above.
+
+The SINTA data (accreditation level, Impact, H5-index, citations and indexing flags of Indonesian
+journals) comes from the public journal list of [SINTA](https://sinta.kemdiktisaintek.go.id), run by
+the Indonesian Ministry of Higher Education, Science and Technology. The bundled `assets/sinta.sqlite`
+is a trimmed copy of it, is not covered by the MIT License, and stays under SINTA's own terms.
+The SINTA badge and card link back to the journal's SINTA profile.
+
+ARTi SciPeek is not affiliated with or endorsed by Scimago, Elsevier, SINTA, the Indonesian
+government, or any publisher listed above.

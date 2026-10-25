@@ -68,6 +68,82 @@
   width: fit-content !important;
 }
 
+/* Two-link pill: the root is a <span>; the metrics link (Scimago) and the trailing "Scopus"
+   segment are sibling anchors sharing the pill's gradient, so the padding moves onto them. */
+.sjm-badge--split {
+  padding: 0 !important;
+  gap: 0 !important;
+  cursor: default !important;
+  overflow: hidden !important;
+}
+
+.sjm-badge__main,
+.sjm-badge__link,
+.sjm-badge__sinta {
+  display: inline-flex !important;
+  align-items: center !important;
+  font: inherit !important;
+  color: inherit !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+  background: transparent !important;
+  transition: background 0.15s ease !important;
+}
+
+.sjm-badge__main {
+  gap: 6px !important;
+  padding: 2px 9px !important;
+}
+
+.sjm-badge__link {
+  font-weight: 500 !important;
+  padding: 2px 10px 2px 8px !important;
+  border-left: 1px solid color-mix(in srgb, currentColor 40%, transparent) !important;
+}
+
+.sjm-badge__main:visited,
+.sjm-badge__main:active,
+.sjm-badge__link:visited,
+.sjm-badge__link:active,
+.sjm-badge__sinta:visited,
+.sjm-badge__sinta:active {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+.sjm-badge__main:hover,
+.sjm-badge__link:hover,
+.sjm-badge__sinta:hover {
+  color: inherit !important;
+  text-decoration: none !important;
+  background: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* SINTA (Indonesian national accreditation) has its own navy, outside the Q1-Q4 ramp so the two
+   scales are never read as one. Whole pill when the journal is SINTA-only; end cap on a Scimago pill. */
+.sjm-badge--sinta { background: linear-gradient(160deg, #3b6fb6, #1e3a5f) !important; color: #fff !important; }
+
+.sjm-badge__sinta {
+  font-weight: 700 !important;
+  padding: 2px 10px 2px 9px !important;
+  background: #1e3a5f !important;
+  color: #fff !important;
+  cursor: pointer !important;
+}
+
+.sjm-badge__sinta:hover {
+  background: #2a4d7d !important;
+}
+
+/* Static segment (a SINTA-side flag, not a link). */
+.sjm-badge__tag {
+  cursor: default !important;
+}
+
+.sjm-badge__tag:hover {
+  background: transparent !important;
+}
+
 .sjm-badge__quartile {
   font-weight: 800 !important;
   font-size: 13px !important;

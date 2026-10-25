@@ -42,46 +42,139 @@ function sjmEnsureOffscreen() {
 
 async function sjmLookupBatch(entries) {
   await sjmEnsureOffscreen();
+  // each result is { scimago, sinta } or null
   const response = await sjmSend({ type: "sjm-lookup-batch", entries });
   return response && response.results ? response.results : entries.map(() => null);
+}
+
+// A lookup answers { scimago: row|null, sinta: row|null } (see offscreen.js). When a page offers
+// several keys for one journal, take the first Scimago hit and the first SINTA hit among them.
+function sjmMergeResults(results) {
+  const scimago = (results.find((r) => r && r.scimago) || {}).scimago || null;
+  const sinta = (results.find((r) => r && r.sinta) || {}).sinta || null;
+  return scimago || sinta ? { scimago, sinta } : null;
+}
+
+function sjmSintaUrl(sinta) {
+  return `https://sinta.kemdiktisaintek.go.id/journals/profile/${sinta.sinta_id}`;
+}
+
+// SINTA stores 0 as "no data" and the exporter turns that into NULL, so a missing value is hidden.
+function sjmSintaImpact(sinta) {
+  return sinta.impact != null ? Number(sinta.impact).toFixed(2) : null;
 }
 
 function sjmBuildBadge(result) {
   if (!result) {
     const wrap = document.createElement("span");
     wrap.className = "sjm-badge sjm-badge--empty";
-    wrap.title = "Not found in the bundled Scimago snapshot";
+    wrap.title = "Not found in the bundled Scimago or SINTA snapshots";
     wrap.textContent = "—";
     return wrap;
   }
+  return result.scimago ? sjmScimagoBadge(result.scimago, result.sinta) : sjmSintaBadge(result.sinta);
+}
 
+// Journal known to SINTA only: same pill shape, navy instead of a quartile colour. The metrics link
+// opens the SINTA profile; "Scopus ✓" is SINTA's own flag (no source id, so no link).
+function sjmSintaBadge(sinta) {
+  const wrap = document.createElement("span");
+  wrap.className = "sjm-badge sjm-badge--split sjm-badge--sinta";
+
+  const main = sjmBadgeLink(
+    "sjm-badge__main",
+    sjmSintaUrl(sinta),
+    `Open on SINTA (national accreditation, level S${sinta.level})`
+  );
+  const levelEl = document.createElement("span");
+  levelEl.className = "sjm-badge__quartile";
+  levelEl.textContent = `SINTA ${sinta.level}`;
+  main.appendChild(levelEl);
+
+  const impact = sjmSintaImpact(sinta);
+  const parts = [];
+  if (impact) parts.push(`Impact ${impact}`);
+  if (sinta.h5_index != null) parts.push(`H5 ${sinta.h5_index}`);
+  parts.forEach((text) => {
+    const el = document.createElement("span");
+    el.className = "sjm-badge__text";
+    el.textContent = text;
+    main.appendChild(el);
+  });
+  wrap.appendChild(main);
+
+  if (sinta.scopus) {
+    const tag = document.createElement("span");
+    tag.className = "sjm-badge__link sjm-badge__tag";
+    tag.title = "Indexed in Scopus according to SINTA";
+    tag.textContent = "Scopus ✓";
+    wrap.appendChild(tag);
+  }
+  return wrap;
+}
+
+function sjmScimagoBadge(result, sinta) {
   const quartile = result.sjr_best_quartile || "?";
   const sjr = result.sjr != null ? Number(result.sjr).toFixed(3) : "?";
   const hIndex = result.h_index != null ? result.h_index : "?";
 
-  const wrap = document.createElement("a");
-  wrap.className = `sjm-badge sjm-badge--${(quartile || "").toLowerCase()}`;
-  wrap.href = `https://www.scimagojr.com/journalsearch.php?q=${result.sourceid}&tip=sid`;
-  wrap.target = "_blank";
-  wrap.rel = "noopener noreferrer";
-  wrap.title = "Open on Scimago";
+  // The pill is a <span> holding two sibling links (anchors cannot nest): the metrics open Scimago,
+  // the trailing "Scopus" segment opens the journal's Scopus source page (Scimago sourceid == Scopus
+  // source id).
+  const wrap = document.createElement("span");
+  wrap.className = `sjm-badge sjm-badge--split sjm-badge--${(quartile || "").toLowerCase()}`;
+
+  const main = sjmBadgeLink(
+    "sjm-badge__main",
+    `https://www.scimagojr.com/journalsearch.php?q=${result.sourceid}&tip=sid`,
+    "Open on Scimago"
+  );
 
   const quartileEl = document.createElement("span");
   quartileEl.className = "sjm-badge__quartile";
   quartileEl.textContent = quartile;
-  wrap.appendChild(quartileEl);
+  main.appendChild(quartileEl);
 
   const sjrEl = document.createElement("span");
   sjrEl.className = "sjm-badge__text";
   sjrEl.textContent = `SJR ${sjr}`;
-  wrap.appendChild(sjrEl);
+  main.appendChild(sjrEl);
 
   const hEl = document.createElement("span");
   hEl.className = "sjm-badge__text";
   hEl.textContent = `H ${hIndex}`;
-  wrap.appendChild(hEl);
+  main.appendChild(hEl);
 
+  const scopus = sjmBadgeLink(
+    "sjm-badge__link",
+    `https://www.scopus.com/sourceid/${result.sourceid}`,
+    "Journal page on Scopus"
+  );
+  scopus.textContent = "Scopus ↗";
+
+  wrap.append(main, scopus);
+
+  // Journal also accredited by SINTA: navy end cap, linking to the SINTA profile.
+  if (sinta) {
+    const cap = sjmBadgeLink(
+      "sjm-badge__sinta",
+      sjmSintaUrl(sinta),
+      `Open on SINTA (national accreditation, level S${sinta.level})`
+    );
+    cap.textContent = `SINTA ${sinta.level}`;
+    wrap.appendChild(cap);
+  }
   return wrap;
+}
+
+function sjmBadgeLink(className, href, title) {
+  const a = document.createElement("a");
+  a.className = className;
+  a.href = href;
+  a.target = "_blank";
+  a.rel = "noopener noreferrer";
+  a.title = title;
+  return a;
 }
 
 // Google Scholar (both search results and profile pages) never expose a

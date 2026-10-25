@@ -1,40 +1,36 @@
 See a journal's Quartile, SJR, H-index and SINTA rank right where you read, with no extra tab.
 
-ARTi SciPeek adds a colour-coded badge beside journal names on Scopus, ScienceDirect and Google Scholar, and a slim tab on 20 publisher sites and on Indonesian university journal sites. Built for researchers, lecturers and students. Fully offline, no data collected.
+ARTi SciPeek adds a colour-coded badge beside journal names in search results, and a slim tab on article and journal pages. It is built for researchers, lecturers and students, works fully offline, and collects no data.
 
-It shows Scimago journal metrics (journal ranking): Quartile (Q1 to Q4), SJR and H-index, with one-click links to the journal's Scimago and Scopus pages. For Indonesian journals it also shows the SINTA accreditation (S1 to S6, the national ranking) with Impact and H5-index, and a link to the journal's SINTA profile.
+WHAT YOU SEE
+• Quartile (Q1 to Q4), SJR and H-index from Scimago, with one-click links to the journal's Scimago and Scopus pages.
+• For Indonesian journals: the SINTA level (S1 to S6, the national accreditation), Impact and H5-index, with a link to the SINTA profile.
 
-Useful for:
-• Researchers choosing where to read, cite or submit
-• Lecturers and reviewers checking the standing of a source
-• Indonesian authors checking a journal's SINTA level next to its international ranking
-• Students judging whether a paper comes from a reputable journal
-• Anyone screening a long list of search results quickly
+WHO IT HELPS
+Researchers choosing where to read, cite or submit. Lecturers and reviewers checking a source. Indonesian authors comparing a SINTA level with the international ranking. Students judging where a paper was published.
 
 WHERE IT WORKS
-Search results: a small colour-coded badge appears beside each journal name, including on Google Scholar profile pages.
+Search results on Scopus, ScienceDirect and Google Scholar get a small badge beside each journal name. Article and journal pages get a slim tab on the right edge of the page: it shows the quartile and SJR, and a click opens the full card. It works on 20 major publisher sites and on journals hosted on Indonesian university domains (*.ac.id) that run Open Journal Systems. The full list is in the GitHub README.
 
-Article and journal pages: a slim tab sits on the right edge of the page. It shows the quartile and SJR at a glance; click it for the full card with SJR, H-index, the SINTA block and "Scimago", "Scopus" and "SINTA" buttons. It works on 20 major publisher sites and on journal and article pages of Open Journal Systems (OJS) sites on Indonesian university domains (*.ac.id). The full list is in the GitHub README. You can drag the tab up or down.
-
-Colours at a glance: Q1 green, Q2 amber, Q3 orange, Q4 red. SINTA is shown in navy, because it is a different scale: SINTA 1 is the best national level and is not the same as Q1.
+Colours: Q1 green, Q2 amber, Q3 orange, Q4 red. The national level is navy because it is a different scale: level 1 is the best national level and is not the same as Q1.
 
 HOW TO USE
-1. Install the extension. There is nothing to set up and no sign-in.
-2. Search as usual, or open an article or journal page on a supported site.
-3. Read the badge or click the edge tab. Use the Scimago, Scopus or SINTA button for the full journal profile (Scopus may ask you to sign in).
+1. Install. There is nothing to set up and no sign-in.
+2. Search as usual, or open an article or journal page.
+3. Read the badge, or click the edge tab and use its buttons for the full profile (Scopus may ask you to sign in).
 
 PRIVATE AND OFFLINE
-The Scimago and SINTA data are bundled inside the extension and looked up on your own device. SciPeek makes no network requests, needs no account, and collects no data. Nothing you browse is sent anywhere. On university sites it acts only on journal and article pages, not on the rest of the site.
+The ranking data is bundled inside the extension and looked up on your own device. The extension makes no network requests, needs no account, and collects no data. On university sites it acts only on journal and article pages.
 
 GOOD TO KNOW
-• Metrics come from a Scimago Journal & Country Rank snapshot and a snapshot of the public SINTA journal list taken in October 2026. SINTA levels change with each accreditation period, so the data ages. Journals that neither source lists (for example, very new ones) show no badge.
-• Matching uses the journal's ID or ISSN when the page provides it, otherwise the exact journal title. A SINTA match for a journal that Scimago already identified is made by ISSN only.
-• Metrics are a guide, not a verdict. Use them alongside your own judgement of a paper and its field.
+• The data comes from a Scimago snapshot and a snapshot of the public SINTA list taken in October 2026. National levels change with each accreditation period, so the data ages. A journal that neither source lists shows no badge.
+• Matching uses the journal's ID or ISSN when the page provides it, otherwise the exact title.
+• Metrics are a guide, not a verdict.
 
 BAHASA INDONESIA
-ARTi SciPeek menampilkan Kuartil, SJR, H-index, dan peringkat SINTA (S1 sampai S6) di samping nama jurnal pada Scopus, ScienceDirect, Google Scholar, situs penerbit, dan situs jurnal OJS di domain *.ac.id. Data tersimpan di dalam ekstensi, bekerja offline, tanpa akun, dan tidak ada data yang dikumpulkan. SINTA adalah akreditasi nasional, bukan padanan kuartil Scimago.
+Menampilkan kuartil, SJR, H-index, dan peringkat nasional (S1–S6) di samping nama jurnal. Data tersimpan di dalam ekstensi, bekerja offline, tanpa akun, dan tidak mengumpulkan data. Peringkat nasional bukan padanan kuartil.
 
 Open source: https://github.com/okik4zuya/arti-scipeek
 Part of the ARTi research toolkit: https://arti.ai.id
 
-ARTi SciPeek is an independent project and is not affiliated with or endorsed by Scimago, Elsevier, SINTA, the Indonesian government, Google, or any publisher.
+An independent project, not affiliated with or endorsed by the services or publishers it links to.
